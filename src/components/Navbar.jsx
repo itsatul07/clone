@@ -1,8 +1,8 @@
 export default function Navbar() {
   return (
     <nav className="navbar ">
-     <div className="w-full flex flex-row  justify-between items-center px-10 py-5"> 
-        <h1>Pallet Rose</h1>
+     <div className="w-full flex flex-row   justify-between items-center text-gray-900 px-10 py-5"> 
+        <p className="text-xl">Pallet Rose</p>
       <ul className="nav-links text-xs flex flex-row gap-7 justify-between">
         <li><a href="/">Get Started</a></li>
         <li><a href="/CreateStrategy">Create Strategy</a></li>
