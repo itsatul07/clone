@@ -11,7 +11,7 @@ export default function Home() {
 
   useEffect(() => {
     // Set initial state
-    gsap.set(navbarRef.current, { opacity: 0, y: -30 });
+    gsap.set(navbarRef.current, { opacity: 0, y: 50 });
     gsap.set(heroContainerRef.current, { opacity: 0, y: 50 });
     gsap.set(titleRef.current, { opacity: 0, y: 50 });
     gsap.set(subtitleRef.current, { opacity: 0, y: 30 });
