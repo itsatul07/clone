@@ -19,6 +19,11 @@ export default function Home() {
     // Animation timeline
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
+    tl.to(navbarRef.li, {
+      y: 0,
+      opacity: 1,
+      duration: 0.6
+    })
     tl.to(navbarRef.current, {
       y: 0,
       opacity: 1,
@@ -27,7 +32,7 @@ export default function Home() {
     .to(heroContainerRef.current, {
       y: 0,
       opacity: 1,
-      duration: 0.8
+      duration: 0.6
     }, "-=0.2")
     .to(titleRef.current, {
       y: 0,
