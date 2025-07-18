@@ -1,5 +1,5 @@
 // src/components/Navbar.jsx
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useState } from 'react';
 
 // Import your images at the top of the file
 import profileIcon from '../assets/profile.png';
@@ -7,6 +7,7 @@ import settingIcon from '../assets/setting.png';
 
 // 1. Wrap the component definition in forwardRef
 const Navbar = forwardRef((props, ref) => {
+  const [darkMode,setDarkMode] =useState(false);
   return (
     // 2. Attach the ref to the main <nav> element
     <nav ref={ref} className="navbar">
@@ -21,7 +22,7 @@ const Navbar = forwardRef((props, ref) => {
           <li><a href="/E-Commerce">E-Commerce</a></li>
           {/* 3. Use the imported variables for the image sources */}
           <li><a href="/signup"><img src={profileIcon} width="24" height="24" alt="profile" /></a></li>
-          <li><a href="/setting"><img src={settingIcon} width="24" height="24" alt="setting" /></a></li>
+          <li><button href="/setting" ><img src={settingIcon} width="24" height="24" alt="setting" /></button></li>
         </ul>
       </div>
     </nav>
