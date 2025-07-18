@@ -1,4 +1,3 @@
-// src/pages/Home.jsx
 import { gsap } from "gsap";
 import { useEffect, useRef } from "react";
 import Navbar from "../components/Navbar";
@@ -10,35 +9,52 @@ export default function Home() {
   const subtitleRef = useRef();
 
   useEffect(() => {
-    // Set initial state
-    gsap.set(navbarRef.current, { opacity: 0, y: 50 });
+    const q = gsap.utils.selector(navbarRef);
+
+    // Set initial state for all elements
     gsap.set(heroContainerRef.current, { opacity: 0, y: 50 });
     gsap.set(titleRef.current, { opacity: 0, y: 50 });
     gsap.set(subtitleRef.current, { opacity: 0, y: 30 });
+    gsap.set(q("li"), { opacity: 0, y: -30 });
 
     // Animation timeline
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-    tl.to(navbarRef.current, {
+    // 1. Animate the hero section first
+    tl.to(heroContainerRef.current, {
       y: 0,
       opacity: 1,
-      duration: 0.6
+      duration: 0.8,
     })
-    .to(heroContainerRef.current, {
-      y: 0,
-      opacity: 1,
-      duration: 0.8
-    }, "-=0.2")
-    .to(titleRef.current, {
-      y: 0,
-      opacity: 1,
-      duration: 0.6
-    }, "-=0.4")
-    .to(subtitleRef.current, {
-      y: 0,
-      opacity: 1,
-      duration: 0.6
-    }, "-=0.4");
+      .to(
+        titleRef.current,
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+        },
+        "-=0.6" // Overlap with the container animation for a smoother effect
+      )
+      .to(
+        subtitleRef.current,
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+        },
+        "-=0.4" // Overlap with the title animation
+      )
+      // 2. Animate the navbar list items last
+      .to(
+        q("li"),
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.1, // Reduced stagger for a quicker, cleaner effect
+          duration: 0.5,
+        },
+        "-=0.2" // Start this animation slightly before the previous one ends
+      );
 
     // Clean up
     return () => tl.kill();
