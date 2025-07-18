@@ -20,41 +20,26 @@ export default function Home() {
     // Animation timeline
     const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-    // 1. Animate the hero section first
-    tl.to(heroContainerRef.current, {
+    tl.to(navbarRef.current, {
       y: 0,
       opacity: 1,
       duration: 0.8,
     })
-      .to(
-        titleRef.current,
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.6,
-        },
-        "-=0.6" // Overlap with the container animation for a smoother effect
-      )
-      .to(
-        subtitleRef.current,
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.6,
-        },
-        "-=0.4" // Overlap with the title animation
-      )
-      // 2. Animate the navbar list items last
-      .to(
-        q("li"),
-        {
-          y: 0,
-          opacity: 1,
-          stagger: 0.1, // Reduced stagger for a quicker, cleaner effect
-          duration: 0.5,
-        },
-        "-=0.2" // Start this animation slightly before the previous one ends
-      );
+    .to(heroContainerRef.current, {
+      y: 0,
+      opacity: 1,
+      duration: 0.8
+    }, "-=0.2")
+    .to(titleRef.current, {
+      y: 0,
+      opacity: 1,
+      duration: 0.6
+    }, "-=0.4")
+    .to(subtitleRef.current, {
+      y: 0,
+      opacity: 1,
+      duration: 0.6
+    }, "-=0.4");
 
     // Clean up
     return () => tl.kill();
