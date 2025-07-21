@@ -1,120 +1,95 @@
-import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { useEffect, useRef } from "react";
+import Navbar from "../components/Navbar";
 
-export default function PhotoStack({ images }) {
-  const containerRef = useRef(null);
+export default function Home() {
+  const navbarRef = useRef();
+  const heroContainerRef = useRef();
+  const titleRef = useRef();
+  const subtitleRef = useRef();
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    const q = gsap.utils.selector(navbarRef);
 
-    const cards = containerRef.current.querySelectorAll(".photo-card");
-    const totalCards = cards.length;
+    // Set initial state for all elements
+    gsap.set(heroContainerRef.current, { opacity: 0, y: 50 });
+    gsap.set(q("p"),{opacity:0})
+    gsap.set(titleRef.current, { opacity: 0, y: 50 });
+    gsap.set(subtitleRef.current, { opacity: 0, y: 30 });
+    gsap.set(q("li"), { opacity: 0, y: -30 });
 
-    const radius = 180; // Arc radius
-    const centerX = containerRef.current.clientWidth / 2; // Dynamic horizontal center
-    const centerY = 160; // Vertical center offset
+    // Animation timeline
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-    gsap.set(cards, {
+    // 1. Animate the hero section first
+    tl.to(heroContainerRef.current, {
+      y: 0,
       opacity: 1,
-      scale: 1,
-      transformOrigin: "center center",
-      zIndex: (i) => i,
-    });
+      duration: 0.8,
+    })
+      .to(
+        titleRef.current,
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+        },
+        "-=0.6" // Overlap with the container animation for a smoother effect
+      )
+      .to(
+        subtitleRef.current,
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+        },
+        "-=0.4" // Overlap with the title animation
+      )
+      // 2. Animate the navbar list items last
+      .to(
+        q("p"),{
+          opacity:1,
+          stagger:0.1,
+          duration: 0.5,
+        }
+      )
+      .to(
+        q("li"),
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.1, // Reduced stagger for a quicker, cleaner effect
+          duration: 0.5,
+        },
+        "-=0.2" // Start this animation slightly before the previous one ends
+      )
+      ;
 
-    cards.forEach((card, i) => {
-      const angle = (-60 + (120 / (totalCards - 1)) * i) * (Math.PI / 180); // radians
-
-      const x = centerX + radius * Math.sin(angle) - card.offsetWidth / 2;
-      const y = centerY - radius * Math.cos(angle) * 0.3;
-
-      const rotationZ = (angle * 180) / Math.PI / 1.5; // rotation around Z-axis
-      const rotationY = (angle * 180) / Math.PI / 3;   // subtle Y-axis 3D tilt
-
-      const z = 50 * Math.cos(angle); // Z-depth for layering
-
-      const brightness = 1 - 0.3 * Math.abs(i - totalCards / 2) / totalCards; // subtle shading
-
-      gsap.set(card, {
-        x,
-        y,
-        z,
-        rotateZ: rotationZ,
-        rotateY: rotationY,
-        filter: `brightness(${brightness})`,
-        transformPerspective: 1200,
-        transformStyle: "preserve-3d",
-        opacity: 1,
-        scale: 1,
-      });
-    });
-
-    // Hover handlers with cleanup
-    function onMouseEnter(card) {
-      return () => {
-        gsap.to(card, {
-          scale: 1.15,
-          z: 100,
-          zIndex: totalCards + 10,
-          filter: "brightness(1.1)",
-          duration: 0.3,
-        });
-        cards.forEach((c) => {
-          if (c !== card) {
-            gsap.to(c, {
-              scale: 0.9,
-              filter: "brightness(0.7)",
-              duration: 0.3,
-            });
-          }
-        });
-      };
-    }
-
-    function onMouseLeave() {
-      gsap.to(cards, {
-        scale: 1,
-        z: (i) =>
-          50 * Math.cos((-60 + (120 / (totalCards - 1)) * i) * (Math.PI / 180)),
-        zIndex: (i) => i,
-        filter: (i) =>
-          `brightness(${1 - 0.3 * Math.abs(i - totalCards / 2) / totalCards})`,
-        duration: 0.3,
-      });
-    }
-
-    cards.forEach((card) => {
-      card.addEventListener("mouseenter", onMouseEnter(card));
-      card.addEventListener("mouseleave", onMouseLeave);
-    });
-
-    return () => {
-      cards.forEach((card) => {
-        card.removeEventListener("mouseenter", onMouseEnter(card));
-        card.removeEventListener("mouseleave", onMouseLeave);
-      });
-    };
-  }, [images.length]);
+    // Clean up
+    return () => tl.kill();
+  }, []);
 
   return (
-    <div
-      ref={containerRef}
-      className="relative w-full max-w-[700px] h-[350px] mx-auto select-none"
-      style={{ perspective: 1200, transformStyle: "preserve-3d" }}
-    >
-      {images.map((src, i) => (
-        <img
-          key={i}
-          src={src}
-          alt={`photo-${i}`}
-          className="photo-card absolute w-[250px] h-[180px] object-cover rounded-xl border-4 border-white shadow-xl cursor-pointer"
-          style={{
-            boxShadow: "0 10px 25px rgba(0,0,0,0.35)",
-            userSelect: "none",
-            backfaceVisibility: "hidden",
-            transformStyle: "preserve-3d",
-          }}
-        />
-      ))}
-    </div>
+    <section className="relative min-h-screen bg-white">
+      <Navbar ref={navbarRef} />
+
+      <div
+        ref={heroContainerRef}
+        className="flex flex-col items-center justify-center h-[80vh] px-6 text-center"
+      >
+        <h1
+          ref={titleRef}
+          className="text-5xl font-bold mb-4 text-black font-michroma"
+        >
+          Pallet Ross
+        </h1>
+        <p
+          ref={subtitleRef}
+          className="text-xl max-w-xl text-gray-700 font-light"
+        >
+          A visually stunning landing page animation using GSAP and Tailwind CSS.
+        </p>
+      </div>
+    </section>
   );
 }
