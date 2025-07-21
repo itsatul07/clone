@@ -8,45 +8,57 @@ export default function PhotoStack({ images }) {
     if (!containerRef.current) return;
 
     const cards = containerRef.current.querySelectorAll(".photo-card");
-
     const totalCards = cards.length;
-    const radius = 180; // Radius of arc
-    const centerX = 300; // Horizontal center offset
-    const centerY = 160; // Vertical center offset
 
+    // Initial stack animation — all cards at center, hidden
     gsap.set(cards, {
-      opacity: 1,
+      opacity: 0,
       scale: 1,
+      x: 0,
+      y: 100,
+      rotateZ: 0,
+      rotateY: 0,
+      transformPerspective: 1200,
       transformOrigin: "center center",
-      zIndex: (i) => i,
     });
 
-    cards.forEach((card, i) => {
-      // Spread cards from -60deg to +60deg to create a wide fan
-      const angle = (-60 + (120 / (totalCards - 1)) * i) * (Math.PI / 180); // radians
+    // Bring the top card upward as single stack
+    gsap.to(cards, {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      stagger: 0.05,
+      ease: "power3.out",
+      onComplete: () => {
+        // After initial entrance, fan out
+        cards.forEach((card, i) => {
+          const radius = 180;
+          const centerX = 300;
+          const centerY = 160;
 
-      // Calculate position along the arc (x,y)
-      const x = centerX + radius * Math.sin(angle) - card.offsetWidth / 2;
-      // Squash vertical offset a bit to form a shallow curve
-      const y = centerY - radius * Math.cos(angle) * 0.3;
+          const angle =
+            (-60 + (120 / (totalCards - 1)) * i) * (Math.PI / 180);
 
-      // Rotate cards to align tangentially with the arc
-      const rotation = (angle * 180) / Math.PI / 1.5; // degrees
-const rotationY = (angle * 180) / Math.PI / 3; // smaller angle for Y rotation
+          const x =
+            centerX + radius * Math.sin(angle) - card.offsetWidth / 2;
+          const y = centerY - radius * Math.cos(angle) * 0.3;
+          const rotation = (angle * 180) / Math.PI / 1.5;
+          const rotationY = (angle * 180) / Math.PI / 3;
 
-gsap.set(card, {
-  x,
-  y,
-  rotateZ: rotation,
-  rotateY: rotationY,
-  transformPerspective: 1200,
-  transformOrigin: "center center",
-});
-
-     
+          gsap.to(card, {
+            x,
+            y,
+            rotateZ: rotation,
+            rotateY: rotationY,
+            delay: 0.1 * i,
+            duration: 0.7,
+            ease: "back.out(1.2)",
+          });
+        });
+      },
     });
 
-    // Hover effect to pop forward
+    // Hover effect
     cards.forEach((card, i) => {
       card.addEventListener("mouseenter", () => {
         gsap.to(card, { scale: 1.15, zIndex: totalCards + 10, duration: 0.3 });
