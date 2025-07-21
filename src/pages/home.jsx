@@ -1,7 +1,14 @@
 import { gsap } from "gsap";
 import { useEffect, useRef } from "react";
 import Navbar from "../components/Navbar";
+import PhotoStack from "../components/PhotoStack";
 
+const images = [
+  "https://images.pexels.com/photos/1827548/pexels-photo-1827548.jpeg",
+  "https://images.pexels.com/photos/2422407/pexels-photo-2422407.jpeg",
+  "https://images.pexels.com/photos/3052727/pexels-photo-3052727.jpeg",
+  "https://images.pexels.com/photos/3091203/pexels-photo-3091203.jpeg",
+];
 export default function Home() {
   const navbarRef = useRef();
   const heroContainerRef = useRef();
@@ -13,7 +20,7 @@ export default function Home() {
 
     // Set initial state for all elements
     gsap.set(heroContainerRef.current, { opacity: 0, y: 50 });
-    gsap.set(q("p"),{opacity:0})
+    gsap.set(q("p"), { opacity: 0 })
     gsap.set(titleRef.current, { opacity: 0, y: 50 });
     gsap.set(subtitleRef.current, { opacity: 0, y: 30 });
     gsap.set(q("li"), { opacity: 0, y: -30 });
@@ -47,11 +54,11 @@ export default function Home() {
       )
       // 2. Animate the navbar list items last
       .to(
-        q("p"),{
-          opacity:1,
-          stagger:0.1,
-          duration: 0.5,
-        }
+        q("p"), {
+        opacity: 1,
+        stagger: 0.1,
+        duration: 0.5,
+      }
       )
       .to(
         q("li"),
@@ -75,20 +82,31 @@ export default function Home() {
 
       <div
         ref={heroContainerRef}
-        className="flex flex-col items-center justify-center h-[80vh] px-6 text-center"
+        className="flex flex-col items-center justify-center p-5 text-center"
       >
         <h1
           ref={titleRef}
-          className="text-5xl font-bold mb-4 text-black font-michroma"
+          className="text-4xl font-bold mb-4 text-black font-michroma"
         >
-          Pallet Ross
+          A place to display your masterpieces.
         </h1>
-        <p
-          ref={subtitleRef}
-          className="text-xl max-w-xl text-gray-700 font-light"
-        >
-          A visually stunning landing page animation using GSAP and Tailwind CSS.
-        </p>
+      </div>
+      
+<div className="bg-white">
+        <PhotoStack images={images} />
+     
+     </div>
+      <div className="flex flex-col items-center text-center"><p
+        ref={subtitleRef}
+        className="text-xl max-w-xl text-gray-700 font-light"
+      >
+        Artist can showcase their work, and art lovers can discover
+        <br />
+        <button className="mt-4 px-6 py-2 bg-gray-900 text-white rounded-lg">
+          join for $59.99
+        </button>
+        <button className="mt-4 px-6 py-2">Read more</button>
+      </p>
       </div>
     </section>
   );

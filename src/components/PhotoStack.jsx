@@ -71,7 +71,7 @@ gsap.set(card, {
   return (
     <div
       ref={containerRef}
-      className="relative w-full max-w-[700px] h-[350px]  mx-auto select-none"
+      className="relative w-full max-w-[700px] h-[300px] mb-6 mx-auto select-none"
       style={{ perspective: 1200 }}
     >
       {images.map((src, i) => (
@@ -79,7 +79,7 @@ gsap.set(card, {
           key={i}
           src={src}
           alt={`photo-${i}`}
-          className="photo-card absolute w-[250px] h-[180px] object-cover rounded-xl border-4 border-white shadow-xl cursor-pointer"
+          className="photo-card absolute w-[200px] h-[120px] object-cover rounded-xl border-4 border-white shadow-xl cursor-pointer"
           style={{
             boxShadow: "0 10px 25px rgba(0,0,0,0.35)",
             userSelect: "none",
