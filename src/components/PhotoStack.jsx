@@ -14,8 +14,8 @@ export default function PhotoStack({ images }) {
     gsap.set(cards, {
       opacity: 0,
       scale: 1,
-      x: 0,
-      y: 100,
+      x: 200,
+      y: 200,
       rotateZ: 0,
       rotateY: 0,
       transformPerspective: 1200,
